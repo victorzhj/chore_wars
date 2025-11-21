@@ -59,3 +59,14 @@ def modify_user_points(user_id, points):
     conn.commit()
     cursor.close()
     return
+
+def delete_user(user_id):
+    """
+    Delete a user from the database by their ID.
+    """
+    cursor = conn.cursor()
+    query = "DELETE FROM Users WHERE user_id = %s"
+    cursor.execute(query, (user_id))
+    conn.commit()
+    cursor.close()
+    return

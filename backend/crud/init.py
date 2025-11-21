@@ -35,6 +35,7 @@ def create_tables(cursor: pymysql.cursors.Cursor):
             deadline DATETIME,
             completed BOOLEAN DEFAULT FALSE,
             FOREIGN KEY (created_by_user_id) REFERENCES Users(user_id)
+            ON DELETE CASCADE
         );
     """)
     cursor.execute("""
@@ -43,8 +44,10 @@ def create_tables(cursor: pymysql.cursors.Cursor):
             user_id INT,
             task_id INT,
             completion_time DATETIME,
-            FOREIGN KEY (user_id) REFERENCES Users(user_id),
+            FOREIGN KEY (user_id) REFERENCES Users(user_id)
+            ON DELETE CASCADE,
             FOREIGN KEY (task_id) REFERENCES Tasks(task_id)
+            ON DELETE CASCADE
         );
     """)
 
