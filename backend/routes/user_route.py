@@ -38,7 +38,7 @@ def points():
 @user_route.route('/user/logout', methods=['GET'])
 def logout():
     session.pop('user_id', None)
-    return redirect(url_for('login'))
+    return redirect(url_for('user_route.login'))
 
 @user_route.route('/user/delete', methods=['GET', 'POST'])
 def delete():

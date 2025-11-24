@@ -16,5 +16,3 @@ def get_leaderboard_data():
     results = cursor.fetchall()
     print(results)
     return results
-
-get_leaderboard_data()
