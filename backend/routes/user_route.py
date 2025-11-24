@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session
+from flask import Blueprint, render_template, request, redirect, url_for, session, jsonify
 from crud.user_crud import get_username, create_user, login_user, get_user_points, modify_user_settings, modify_user_points, delete_user
 user_route = Blueprint('user_route', __name__, template_folder='../../frontend/user_templates')
 
@@ -9,7 +9,7 @@ def login():
         password = request.form['password']
         user = login_user(username, password)
         if user:
-            session['user_id'] = user['user_id']
+            session['user_id'] = user[0]
             return redirect(url_for('tasks_route.tasks'))
         else:
             return render_template('login.html', error='Invalid credentials')
@@ -19,9 +19,9 @@ def login():
 def register():
     if request.method == 'POST':
         username = request.form['username']
-        if (not get_username(username)):
+        if (get_username(username)):
             return render_template('register.html', error='Username already used')
-        create_user(request.form.to_dict)
+        create_user(request.form.to_dict())
         return render_template('login.html', code='user created successfully')
     return render_template('register.html')
 
@@ -29,8 +29,10 @@ def register():
 def points():
     user_id = session.get('user_id')
     if request.method == 'POST':
-        current_points = get_user_points(user_id)
-        new_points = current_points + request.get_json()['points']
+        current_points = get_user_points(user_id)[0]
+        print(session['user_id'])
+        print(current_points)
+        new_points = int(current_points) + request.get_json()['points']
         modify_user_points(user_id=user_id, points=new_points)
         return redirect(url_for('leaderboard_route.leaderboard'))
     return render_template('points.html')
@@ -46,5 +48,5 @@ def delete():
         user_id = session.get('user_id')
         delete_user(user_id)
         session.pop('user_id', None)
-        return redirect(url_for('login'))
+        return redirect(url_for('user_route.login'))
     return render_template('delete.html')

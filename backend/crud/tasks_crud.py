@@ -1,4 +1,4 @@
-from config_db_connection import Config
+from .config_db_connection import Config
 
 conn = Config().create_connection()
 
@@ -8,7 +8,19 @@ def get_open_tasks():
     cursor.execute(query)
     tasks = cursor.fetchall()
     cursor.close()
-    return tasks
+    tasks_dict = []
+    for task in tasks:
+        temp_dict = {
+            'task_id': task[0],
+            'title': task[1],
+            'description': task[2],
+            'created_by_user_id': task[3],
+            'points': task[4],
+            'deadline': task[5],
+            'completed': task[6]
+        }
+        tasks_dict.append(temp_dict)
+    return tasks_dict
 
 def get_closed_tasks():
     cursor = conn.cursor()
@@ -16,7 +28,19 @@ def get_closed_tasks():
     cursor.execute(query)
     tasks = cursor.fetchall()
     cursor.close()
-    return tasks
+    tasks_dict = []
+    for task in tasks:
+        temp_dict = {
+            'task_id': task[0],
+            'title': task[1],
+            'description': task[2],
+            'created_by_user_id': task[3],
+            'points': task[4],
+            'deadline': task[5],
+            'completed': task[6]
+        }
+        tasks_dict.append(temp_dict)
+    return tasks_dict
 
 def get_user_completed_tasks(user_id):
     cursor = conn.cursor()
@@ -34,7 +58,16 @@ def get_user_completed_tasks(user_id):
     cursor.execute(query, (user_id))
     tasks = cursor.fetchall()
     cursor.close()
-    return tasks
+    tasks_dict = []
+    for task in tasks:
+        temp_dict = {
+            'title': task[0],
+            'description': task[1],
+            'points': task[2],
+            'deadline': task[3]
+        }
+        tasks_dict.append(temp_dict)
+    return tasks_dict
 
 def add_task(task_data):
     cursor = conn.cursor()

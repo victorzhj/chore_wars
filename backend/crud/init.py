@@ -53,12 +53,12 @@ def create_tables(cursor: pymysql.cursors.Cursor):
 
 def init_data(cursor: pymysql.cursors.Cursor):
     cursor.execute("""
-        INSERT INTO Users (username, user_password, nickname) VALUES
-            ('Tester1', 'testing1', 'TestGuy1'),
-            ('Tester2', 'testing2', 'TestGuy2'),
-            ('Tester3', 'testing3', 'TestGuy3')
-    """)
-
+        INSERT INTO Users (username, user_password, nickname, points) VALUES
+            ('Tester1', 'testing1', 'TestGuy1', 10),
+            ('Tester2', 'testing2', 'TestGuy2', 30),
+            ('Tester3', 'testing3', 'TestGuy3', 0)
+    """
+)
     cursor.execute("""
         INSERT INTO Tasks (title, description, created_by_user_id, points, deadline, completed) VALUES
             ('Wash Dishes', 'Clean all dishes in the sink', 1, 10, '2024-12-01 18:00:00', FALSE),
