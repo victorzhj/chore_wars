@@ -1,4 +1,4 @@
-from config_db_connection import Config
+from .config_db_connection import Config
 
 conn = Config().create_connection()
 
