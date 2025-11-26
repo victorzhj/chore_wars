@@ -8,6 +8,16 @@ def tasks():
     closed_tasks = get_closed_tasks()
     return render_template('tasks.html', open_tasks=open_tasks, closed_tasks=closed_tasks)
 
+@tasks_route.route('/tasks/open', methods=['GET'])
+def open_tasks():
+    open_tasks = get_open_tasks()
+    return render_template('open_tasks.html', open_tasks=open_tasks)
+
+@tasks_route.route('/tasks/closed', methods=['GET'])
+def closed_tasks():
+    closed_tasks = get_closed_tasks()
+    return render_template('closed_tasks.html', closed_tasks=closed_tasks)
+
 @tasks_route.route('/tasks/user', methods=['GET'])
 def user_completed_tasks():
     user_id = session['user_id']
