@@ -14,5 +14,9 @@ app.register_blueprint(leaderboard_route)
 app.register_blueprint(tasks_route)
 app.register_blueprint(user_route)
 
+@app.route('/')
+def home():
+    return redirect(url_for('user_route.login'))
+
 if __name__ == '__main__':
     app.run(debug=True)
