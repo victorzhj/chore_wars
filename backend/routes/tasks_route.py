@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, jsonify
-from crud.tasks_crud import get_open_tasks, get_closed_tasks, get_user_completed_tasks, add_task, update_task, delete_task
+from crud.tasks_crud import get_open_tasks, get_closed_tasks, get_user_completed_tasks, add_task, update_task, delete_task, complete_task
 tasks_route = Blueprint('tasks_route', __name__, template_folder='../../frontend/tasks_templates')
 
 @tasks_route.route('/tasks', methods=['GET'])
@@ -90,6 +90,24 @@ def add_tasks():
         add_task(task)
         return render_template('add_task.html')
     return render_template('add_task.html')
+
+@tasks_route.route('/tasks/completed', methods=['POST'])
+def complete_task():
+    """
+    Docstring for complete_task
+    Handles marking a task as completed. Supports POST requests.
+    Returns:
+        JSON response indicating success status.
+    To mark a task as completed in the database, send a POST request with JSON body containing the task ID.
+    Example JSON body:
+        {
+            "task_id": 1
+        }
+    """
+    user_id = session['user_id']
+    task_id = request.get_json()['task_id']
+    complete_task(task_id, user_id)
+    return jsonify({'status': 'success'})
 
 @tasks_route.route('/tasks/modify', methods=['GET', 'POST'])
 def modify_task():

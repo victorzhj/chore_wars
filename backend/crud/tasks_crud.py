@@ -86,6 +86,17 @@ def add_task(task_data):
     cursor.close()
     return
 
+def complete_task(task_id, user_id):
+    cursor = conn.cursor()
+    query = "UPDATE Tasks SET completed=TRUE WHERE task_id=%s;"
+    cursor.execute(query, (task_id))
+    conn.commit()
+    query = "INSERT INTO Logs (user_id, task_id, completion_time) VALUES (%s, %s, NOW());"
+    cursor.execute(query, (user_id, task_id))
+    conn.commit()
+    cursor.close()
+    return
+
 def update_task(task_id, task_data):
     cursor = conn.cursor()
     query = """
