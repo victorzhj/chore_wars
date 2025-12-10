@@ -86,6 +86,7 @@ def add_task(task_data):
     cursor.close()
     return
 
+
 def complete_task(task_id, user_id):
     cursor = conn.cursor()
     query = "UPDATE Tasks SET completed=TRUE WHERE task_id=%s;"
@@ -124,4 +125,11 @@ def delete_task(task_id):
     cursor.close()
     return
 
-
+def multi_delete_tasks(task_ids):
+    cursor = conn.cursor()
+    format_strings = ','.join(['%s'] * len(task_ids))
+    query = f"DELETE FROM Tasks WHERE task_id IN ({format_strings});"
+    cursor.execute(query, tuple(task_ids))
+    conn.commit()
+    cursor.close()
+    return

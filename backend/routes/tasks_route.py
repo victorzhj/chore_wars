@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, jsonify
-from crud.tasks_crud import get_open_tasks, get_closed_tasks, get_user_completed_tasks, add_task, update_task, delete_task, complete_task
+from crud.tasks_crud import get_open_tasks, get_closed_tasks, get_user_completed_tasks, add_task, update_task, delete_task, complete_task, multi_delete_tasks
 tasks_route = Blueprint('tasks_route', __name__, template_folder='../../frontend/tasks_templates')
 
 @tasks_route.route('/tasks', methods=['GET'])
@@ -148,4 +148,21 @@ def delete_task_route():
     """
     task_id = request.get_json()['task_id']
     delete_task(task_id)
+    return redirect(url_for('tasks_route.tasks'))
+
+@tasks_route.route('/tasks/multi_delete', methods=['POST'])
+def multi_delete_tasks_route():
+    """
+    Docstring for multi_delete_tasks_route
+    Handles deleting multiple tasks. Supports POST requests.
+    Returns:
+        Redirects to the main tasks page after deletion.
+    To delete multiple tasks from the database, send a POST request with JSON body containing a list of task IDs.
+    Example JSON body:
+        {
+            "task_ids": [1, 2, 3]
+        }
+    """
+    task_ids = request.get_json()['task_ids']
+    multi_delete_tasks(task_ids)
     return redirect(url_for('tasks_route.tasks'))
