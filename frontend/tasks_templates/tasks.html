@@ -33,6 +33,7 @@
 
 <div style="margin-bottom: 20px; text-align: right;">
     <a href="/tasks/add" class="btn btn-add">+ Add New Task</a>
+    <button onclick="delete_tasks()" class="btn" style="background-color: #dc3545; color: white; margin-left: 10px;">Delete Selected Tasks</button>
 </div>
 
 <h2>🔥 Open Tasks</h2>
@@ -44,6 +45,7 @@
             <p style="color: #888; font-size: 0.8rem;">Due: {{ task.deadline }}</p>
         </div>
         <div>
+            <input id="delete-{{ task.task_id }}" type="checkbox" class="to-be-delete" style="margin-right: 10px;">
             <a href="/tasks/modify" style="color: #6c757d; margin-right: 10px; font-size: 0.9rem;">Edit</a>
             <button class="btn btn-complete">Do it!</button>
         </div>
@@ -65,5 +67,42 @@
     <p class="no-tasks">No completed tasks yet.</p>
 {% endfor %}
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteCheckboxes = document.querySelectorAll('.to-be-delete');
+        deleteCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const taskCard = this.closest('.task-card');
+                if (this.checked) {
+                    taskCard.style.backgroundColor = '#f8d7da'; 
+                } else {
+                    taskCard.style.backgroundColor = 'white';
+                }
+            });
+        });
+    });
+    function delete_tasks() {
+        const checkedBoxes = document.querySelectorAll('.to-be-delete:checked');
+        const taskIds = Array.from(checkedBoxes).map(box => box.id.split('-')[1]);
+
+        if (taskIds.length === 0) {
+            alert('No tasks selected for deletion.');
+            return;
+        }
+
+        fetch('/tasks/multi_delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ task_ids: taskIds })
+        })
+        .then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Error deleting tasks.');
+            }
+        });   
+    }
+</script>
 </body>
 </html>
