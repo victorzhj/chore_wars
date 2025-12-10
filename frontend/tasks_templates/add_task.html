@@ -2,100 +2,138 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Add New Task</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Task - Chore Wars</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
-        h1 { text-align: center; }
-        label { display: block; margin-top: 10px; font-weight: bold; }
-        input[type="text"], input[type="number"], input[type="datetime-local"], textarea {
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5; /* 부드러운 회색 배경 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
             width: 100%;
-            padding: 8px;
+            max-width: 400px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
             margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
             box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s;
         }
-        textarea { resize: vertical; }
+        input:focus, textarea:focus {
+            border-color: #007bff; /* 포커스 시 파란 테두리 */
+            outline: none;
+        }
+        textarea {
+            resize: vertical; /* 세로로만 크기 조절 가능 */
+        }
         button {
-            background-color: #4CAF50;
+            margin-top: 25px;
+            padding: 12px;
+            background-color: #007bff;
             color: white;
-            padding: 10px 15px;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
-            margin-top: 20px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
         }
-        button:hover { background-color: #45a049; }
-        .message { color: green; text-align: center; margin-top: 15px; }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .back-link:hover {
+            color: #007bff;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Create a New Task</h1>
-        <form id="addTaskForm">
-            <label for="title">Title:</label>
-            <input type="text" id="title" name="title" required>
 
-            <label for="description">Description:</label>
-            <textarea id="description" name="description" rows="4" required></textarea>
+<div class="container">
+    <h2>📝 Add New Task 📝</h2>
 
-            <label for="deadline">Deadline:</label>
-            <input type="datetime-local" id="deadline" name="deadline" required>
+    <form id="addTaskForm">
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" required>
 
-            <label for="points">Points:</label>
-            <input type="number" id="points" name="points" min="1" required>
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="3"></textarea>
 
-            <button type="submit">Add Task</button>
-        </form>
-        <p id="statusMessage" class="message" style="display: none;"></p>
-        <button onclick="window.location.href='/tasks'">Go to Tasks</button>
-    </div>
+        <label for="points">Points</label>
+        <input type="number" id="points" name="points" value="10" min="1" required>
 
-    <script>
-        document.getElementById('addTaskForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+        <label for="deadline">Deadline</label>
+        <input type="datetime-local" id="deadline" name="deadline" required>
 
-            const title = document.getElementById('title').value;
-            const description = document.getElementById('description').value;
-            const deadline = document.getElementById('deadline').value;
-            const points = parseInt(document.getElementById('points').value);
-            const statusMessage = document.getElementById('statusMessage');
+        <button type="submit">Create Task</button>
+    </form>
 
-            const taskData = {
-                title: title,
-                description: description,
-                deadline: deadline,
-                points: points
-            };
+    <a href="/tasks" class="back-link">← Cancel & Back to Tasks</a>
+</div>
 
-            try {
-                // The backend endpoint is /tasks/add as per tasks_route.py
-                const response = await fetch('/tasks/add', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(taskData)
-                });
+<script>
+    // Handle Form Submit with JSON (Functionality kept exactly same)
+    document.getElementById('addTaskForm').addEventListener('submit', function(e) {
+        e.preventDefault();
 
-                if (response.ok) {
-                    statusMessage.textContent = 'Task added successfully!';
-                    statusMessage.style.display = 'block';
-                    // Optionally clear the form or redirect
-                    document.getElementById('addTaskForm').reset(); 
-                } else {
-                    statusMessage.textContent = 'Failed to add task.';
-                    statusMessage.style.color = 'red';
-                    statusMessage.style.display = 'block';
-                }
-            } catch (error) {
-                statusMessage.textContent = 'An error occurred. Check console for details.';
-                statusMessage.style.color = 'red';
-                statusMessage.style.display = 'block';
-                console.error('Fetch error:', error);
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+
+        fetch('/tasks/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(response => {
+            if (response.ok) {
+                // Optional: Show success animation or simpler alert
+                alert('Task added successfully!');
+                window.location.href = '/tasks';
+            } else {
+                alert('Failed to add task. Please try again.');
             }
+        }).catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred.');
         });
-    </script>
+    });
+</script>
+
 </body>
 </html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modify Task - Chore Wars</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; max-width: 500px; margin: 0 auto; background-color: #f4f4f9; }
+        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; }
+        label { display: block; margin-top: 10px; font-weight: bold; color: #555; }
+        input, textarea, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { margin-top: 20px; padding: 12px; background-color: #ffc107; color: #333; border: none; cursor: pointer; width: 100%; font-weight: bold; font-size: 16px; border-radius: 4px; }
+        button:hover { background-color: #e0a800; }
+        .back-link { display: block; text-align: center; margin-top: 15px; color: #007bff; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>✏️ Modify Task ✏️ </h2>
+    <p style="font-size: 0.9rem; color: #666; text-align: center;">Enter the Task ID to update details.</p>
+
+    <form id="modifyTaskForm">
+        <label>Task ID</label>
+        <input type="number" name="task_id" required>
+
+        <label>New Title</label>
+        <input type="text" name="title" required>
+
+        <label>New Description</label>
+        <textarea name="description" rows="3" ></textarea>
+
+        <label>Points</label>
+        <input type="number" name="points" value="10" required>
+
+        <label>Deadline</label>
+        <input type="datetime-local" name="deadline" required>
+
+        <label>Status</label>
+        <select name="completed">
+            <option value="false">Open (In Progress)</option>
+            <option value="true">Closed (Completed)</option>
+        </select>
+
+        <button type="submit">Update Task</button>
+    </form>
+
+    <a href="/tasks" class="back-link">Cancel & Back to List</a>
+</div>
+
+<script>
+    document.getElementById('modifyTaskForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+
+        // 'completed' 값을 문자열에서 실제 불리언(true/false)으로 변환
+        data.completed = data.completed === 'true';
+
+        fetch('/tasks/modify', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(response => {
+            if (response.ok) {
+                alert('Task updated successfully!');
+                window.location.href = '/tasks';
+            } else {
+                alert('Error updating task. Please check the Task ID.');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Closed Tasks</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #e9ecef; }
+        h2 { border-bottom: 2px solid #adb5bd; padding-bottom: 10px; color: #495057; }
+        .task-item { background: #f8f9fa; border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 5px; opacity: 0.8; }
+        .task-item h3 { text-decoration: line-through; color: #6c757d; margin: 0; }
+        .nav-link { margin-right: 15px; text-decoration: none; color: #333; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div style="margin-bottom: 20px;">
+        <a href="/tasks" class="nav-link">🏠 Home</a>
+        <a href="/tasks/open" class="nav-link">Show Open Tasks</a>
+    </div>
+
+    <h2>✅ Closed Tasks (History)</h2>
+
+    {% for task in closed_tasks %}
+    <div class="task-item">
+        <h3>{{ task.title }}</h3>
+        <p style="color: #666;">{{ task.description }}</p>
+        <p style="font-size: 0.8rem;">Points Earned: {{ task.points }} | Deadline was: {{ task.deadline }}</p>
+    </div>
+    {% else %}
+    <p>No closed tasks yet.</p>
+    {% endfor %}
+
+</body>
+</html>
