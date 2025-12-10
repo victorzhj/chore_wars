@@ -2,136 +2,68 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>All Tasks</title>
+    <title>Tasks - Chore Wars</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .task-section { margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 15px; }
-        h1 { text-align: center; color: #333; }
-        h2 { border-bottom: 1px solid #ccc; padding-bottom: 5px; color: #555; }
-        .task-card {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-        .task-card.completed { background-color: #e6ffe6; border-left: 5px solid #4CAF50; }
-        .task-card h3 { margin-top: 0; color: #007bff; }
-        .task-card p { margin: 5px 0; }
-        .complete-btn {
-            background-color: #007bff;
-            color: white;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            float: right;
-        }
-        .complete-btn:hover { background-color: #0056b3; }
-        .nav-buttons { text-align: center; margin-bottom: 20px; }
-        .nav-buttons button { margin: 0 10px; padding: 10px 20px; }
-        .task-points { font-weight: bold; color: #ff9800; }
+        body { font-family: sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background-color: #f4f4f9; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .nav a { margin-left: 15px; text-decoration: none; color: #007bff; font-weight: bold; }
+        h2 { border-bottom: 2px solid #ddd; padding-bottom: 10px; color: #333; }
+        .task-card { background: white; padding: 15px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
+        .task-info h3 { margin: 0 0 5px 0; font-size: 1.1rem; }
+        .task-info p { margin: 0; color: #666; font-size: 0.9rem; }
+        .points-badge { background-color: #ffc107; padding: 5px 10px; border-radius: 15px; font-weight: bold; font-size: 0.8rem; margin-left: 10px; }
+        .btn { padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; text-decoration: none; display: inline-block;}
+        .btn-add { background-color: #007bff; color: white; }
+        .btn-complete { background-color: #28a745; color: white; }
+        .no-tasks { color: #888; font-style: italic; }
     </style>
 </head>
 <body>
-    <div class="nav-buttons">
-        <button onclick="window.location.href='/leaderboard'">Leaderboard</button>
-        <button onclick="window.location.href='/tasks/add'">Add New Task</button>
-        <form action="/user/logout" method="POST" style="display: inline-block;">
-            <button type="submit" style="background-color: #f44336;">Logout</button>
+
+<header>
+    <h1>Chore Wars</h1>
+    <nav class="nav">
+        <a href="/leaderboard">🏆 Leaderboard</a>
+        <a href="/tasks/user">My Completed Tasks</a>
+        <form action="/user/logout" method="POST" style="display:inline;">
+            <button type="submit" style="background:none; border:none; color:#dc3545; cursor:pointer; font-weight:bold; font-size:16px;">Logout</button>
         </form>
+    </nav>
+</header>
+
+<div style="margin-bottom: 20px; text-align: right;">
+    <a href="/tasks/add" class="btn btn-add">+ Add New Task</a>
+</div>
+
+<h2>🔥 Open Tasks</h2>
+{% for task in open_tasks %}
+    <div class="task-card">
+        <div class="task-info">
+            <h3>{{ task.title }} <span class="points-badge">{{ task.points }} pts</span></h3>
+            <p>{{ task.description }}</p>
+            <p style="color: #888; font-size: 0.8rem;">Due: {{ task.deadline }}</p>
+        </div>
+        <div>
+            <a href="/tasks/modify" style="color: #6c757d; margin-right: 10px; font-size: 0.9rem;">Edit</a>
+            <button class="btn btn-complete">Do it!</button>
+        </div>
     </div>
+{% else %}
+    <p class="no-tasks">No open tasks available. Great job!</p>
+{% endfor %}
 
-    <h1>Task Management System</h1>
-    
-    <div class="task-section">
-        <h2>🔥 Open Tasks</h2>
-        {% for task in open_tasks %}
-            <div class="task-card" id="task-{{ task.task_id }}">
-                <h3>{{ task.title }} 
-                    <span class="task-points">({{ task.points }} Points)</span>
-                </h3>
-                <p><strong>Description:</strong> {{ task.description }}</p>
-                <p><strong>Deadline:</strong> {{ task.deadline }}</p>
-                <button 
-                    class="complete-btn" 
-                    data-task-id="{{ task.task_id }}" 
-                    data-points="{{ task.points }}"
-                    onclick="completeTask(this)">
-                    Mark as Completed
-                </button>
-            </div>
-        {% endfor %}
-        {% if not open_tasks %}
-            <p>No open tasks available. Time to create one!</p>
-        {% endif %}
+<h2>✅ Closed Tasks</h2>
+{% for task in closed_tasks %}
+    <div class="task-card" style="opacity: 0.7; background-color: #e9ecef;">
+        <div class="task-info">
+            <h3 style="text-decoration: line-through;">{{ task.title }} <span class="points-badge">{{ task.points }} pts</span></h3>
+            <p>{{ task.description }}</p>
+        </div>
+        <div style="color: green; font-weight: bold;">Completed</div>
     </div>
+{% else %}
+    <p class="no-tasks">No completed tasks yet.</p>
+{% endfor %}
 
-    <div class="task-section">
-        <h2>✅ Closed Tasks</h2>
-        {% for task in closed_tasks %}
-            <div class="task-card completed">
-                <h3>{{ task.title }} <span class="task-points">({{ task.points }} Points)</span></h3>
-                <p><strong>Description:</strong> {{ task.description }}</p>
-                <p><strong>Deadline:</strong> {{ task.deadline }}</p>
-                <p style="color: #4CAF50; font-weight: bold;">Completed</p>
-            </div>
-        {% endfor %}
-        {% if not closed_tasks %}
-            <p>No closed tasks yet.</p>
-        {% endif %}
-    </div>
-
-    <script>
-        // Function to handle task completion
-        async function completeTask(buttonElement) {
-            const taskId = buttonElement.getAttribute('data-task-id');
-            const points = parseInt(buttonElement.getAttribute('data-points'));
-            
-            // 1. Update the task status to completed (using /tasks/modify)
-            const taskData = {
-                task_id: taskId,
-                title: document.querySelector(`#task-${taskId} h3`).textContent.split('(')[0].trim(), // Simple way to grab existing title
-                description: document.querySelector(`#task-${taskId} p:nth-child(2)`).textContent.replace('Description: ', ''), // Grab existing description
-                points: points,
-                deadline: new Date().toISOString().slice(0, 16), // Use current date/time in 'YYYY-MM-DDThh:mm' format
-                completed: true
-            };
-
-            try {
-                const modifyResponse = await fetch('/tasks/modify', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(taskData)
-                });
-
-                if (!modifyResponse.ok) {
-                    throw new Error('Failed to modify task status');
-                }
-                
-                // 2. Update the user's points (using /user/points)
-                const pointsData = { points: points };
-
-                const pointsResponse = await fetch('/user/points', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(pointsData)
-                });
-                
-                if (pointsResponse.ok) {
-                    // Success: Task updated and points added. The /user/points route redirects to the leaderboard on success.
-                    // For a seamless experience, we should probably reload the current tasks page instead of blindly following the redirect.
-                    alert('Task completed and points added! Redirecting to Tasks page...');
-                    window.location.reload(); 
-                } else {
-                    throw new Error('Failed to update user points');
-                }
-
-            } catch (error) {
-                console.error('Error completing task:', error);
-                alert('An error occurred while completing the task. Please check the console.');
-            }
-        }
-    </script>
 </body>
 </html>
