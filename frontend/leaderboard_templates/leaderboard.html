@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - Chore Wars</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f4f4f9; }
+        h1 { text-align: center; color: #333; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #007bff; color: white; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        tr:hover { background-color: #f1f1f1; }
+        .rank { font-weight: bold; text-align: center; width: 60px; }
+        .points { font-weight: bold; color: #28a745; }
+        .back-link { display: block; margin-top: 20px; text-align: center; }
+        .back-link a { text-decoration: none; color: #007bff; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h1>🏆 Hall of Fame 🏆</h1>
+    <p style="text-align: center;">Top users with the most points!</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th class="rank">Rank</th>
+                <th>Nickname</th>
+                <th>Points</th>
+                <th>Tasks Completed</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in leaderboard %}
+            <tr>
+                <td class="rank">{{ loop.index }}</td>
+
+                <td>{{ user[1] }}</td>
+
+                <td class="points">{{ user[2] }} pts</td>
+
+                <td>{{ user[3] }} tasks</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" style="text-align: center;">No data available yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="back-link">
+        <a href="/tasks">← Back to Task List</a>
+    </div>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect, url_for
 from routes.leaderboard_route import leaderboard_route
 from routes.tasks_route import tasks_route
 from routes.user_route import user_route

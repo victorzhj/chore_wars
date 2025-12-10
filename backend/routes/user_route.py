@@ -25,7 +25,7 @@ def login():
         user = login_user(username, password)
         if user:
             session['user_id'] = user[0]
-            return redirect(url_for('tasks_route.tasks'))
+            return redirect(url_for('leaderboard_route.leaderboard'))
         else:
             return render_template('login.html', error='Invalid credentials')
     return render_template('login.html')

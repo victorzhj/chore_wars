@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Account - Chore Wars</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #fff0f0; }
+        .container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 350px; text-align: center; }
+        h2 { color: #dc3545; }
+        p { color: #555; margin-bottom: 20px; }
+        .btn-group { display: flex; gap: 10px; justify-content: center; }
+        button { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        .btn-delete { background-color: #dc3545; color: white; }
+        .btn-cancel { background-color: #6c757d; color: white; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>⚠ Delete Account</h2>
+    <p>Are you sure you want to delete your account? <br> This action cannot be undone.</p>
+
+    <form method="POST" action="/user/delete">
+        <div class="btn-group">
+            <button type="button" class="btn-cancel" onclick="window.location.href='/tasks'">Cancel</button>
+            <button type="submit" class="btn-delete">Yes, Delete</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
