@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, jsonify
-from crud.tasks_crud import get_open_tasks, get_closed_tasks, get_user_completed_tasks, add_task, update_task, delete_task, complete_task
+from crud.tasks_crud import get_open_tasks, get_closed_tasks, get_user_completed_tasks, add_task, add_multiple_tasks_crud, update_task, delete_task, complete_task, multi_delete_tasks
 from crud.user_crud import get_user_points, modify_user_points
 tasks_route = Blueprint('tasks_route', __name__, template_folder='../../frontend/tasks_templates')
 

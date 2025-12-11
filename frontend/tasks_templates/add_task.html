@@ -153,7 +153,7 @@
         return `
             <div class="task-form" data-task="${taskNumber}">
                 <div class="task-header">
-                    <span class="task-number">Task ${taskNumber}</span>
+                    <span class="task-number">Task</span>
                     ${taskNumber > 1 ? `<button type="button" class="remove-btn" onclick="removeTaskForm(${taskNumber})">×</button>` : ''}
                 </div>
                 
@@ -194,20 +194,21 @@
 
         const formData = new FormData(this);
         const tasks = [];
-        
+        const taskForms = document.querySelectorAll('.task-form');
+
         // Extract all task data
-        for (let i = 1; i <= taskCount; i++) {
-            const taskForm = document.querySelector(`[data-task="${i}"]`);
+        taskForms.forEach(taskForm => {
+            const taskNumber = taskForm.getAttribute('data-task');
             if (taskForm) {
                 const task = {
-                    title: formData.get(`title-${i}`),
-                    description: formData.get(`description-${i}`),
-                    points: parseInt(formData.get(`points-${i}`)),
-                    deadline: formData.get(`deadline-${i}`)
+                    title: formData.get(`title-${taskNumber}`),
+                    description: formData.get(`description-${taskNumber}`),
+                    points: parseInt(formData.get(`points-${taskNumber}`)),
+                    deadline: formData.get(`deadline-${taskNumber}`)
                 };
                 tasks.push(task);
             }
-        }
+        })
 
         const endpoint = tasks.length === 1 ? '/tasks/add' : '/tasks/add_multiple';
         const body = tasks.length === 1 ? JSON.stringify(tasks[0]) : JSON.stringify({tasks: tasks});

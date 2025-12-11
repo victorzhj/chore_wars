@@ -19,8 +19,8 @@ def create_user(user_data):
     """
     conn = Config().create_connection()
     cursor = conn.cursor()
-    insert_query = "INSERT INTO Users (username, user_password, nickname) VALUES (%s, %s, %s)"
-    cursor.execute(insert_query, (user_data['username'], user_data['password'], user_data['nickname']))
+    insert_query = "INSERT INTO Users (username, user_password) VALUES (%s, %s)"
+    cursor.execute(insert_query, (user_data['username'], user_data['password']))
     conn.commit()
     cursor.close()
     conn.close()
