@@ -52,7 +52,8 @@ def closed_tasks():
     return render_template('closed_tasks.html', closed_tasks=closed_tasks)
 
 @tasks_route.route('/tasks/user', methods=['GET'])
-def user_completed_tasks(user_id):
+@tasks_route.route('/tasks/user/<int:user_id>', methods=['GET'])
+def user_completed_tasks(user_id=None):
     """
     Docstring for user_completed_tasks
     Renders a page displaying all tasks completed by the current user.
