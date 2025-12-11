@@ -52,7 +52,7 @@ def closed_tasks():
     return render_template('closed_tasks.html', closed_tasks=closed_tasks)
 
 @tasks_route.route('/tasks/user', methods=['GET'])
-def user_completed_tasks():
+def user_completed_tasks(user_id):
     """
     Docstring for user_completed_tasks
     Renders a page displaying all tasks completed by the current user.
@@ -64,7 +64,8 @@ def user_completed_tasks():
             <p>{{ task.title }} - {{ task.deadline }}</p>
         {% endfor %}
     """
-    user_id = session['user_id']
+    if user_id == None:
+        user_id = session['user_id']
     completed_tasks = get_user_completed_tasks(user_id)
     return render_template('user_completed_tasks.html', tasks=completed_tasks)
 

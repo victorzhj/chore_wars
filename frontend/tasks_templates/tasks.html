@@ -13,6 +13,7 @@
         .task-info p { margin: 0; color: #666; font-size: 0.9rem; }
         .points-badge { background-color: #ffc107; padding: 5px 10px; border-radius: 15px; font-weight: bold; font-size: 0.8rem; margin-left: 10px; }
         .btn { padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; text-decoration: none; display: inline-block;}
+        .btn[hidden] {display: none !important;}
         .btn-add { background-color: #007bff; color: white; }
         .btn-complete { background-color: #28a745; color: white; }
         .no-tasks { color: #888; font-style: italic; }
@@ -33,7 +34,7 @@
 
 <div style="margin-bottom: 20px; text-align: right;">
     <a href="/tasks/add" class="btn btn-add">+ Add New Task</a>
-    <button onclick="delete_tasks()" class="btn" style="background-color: #dc3545; color: white; margin-left: 10px;">Delete Selected Tasks</button>
+    <button id="deleteButton" hidden onclick="delete_tasks()" class="btn" style="background-color: #dc3545; color: white; margin-left: 10px;">Delete Selected Tasks</button>
 </div>
 
 <h2>🔥 Open Tasks</h2>
@@ -81,6 +82,18 @@
             });
         });
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteCheckboxes = document.querySelectorAll('.to-be-delete');
+        const deleteButton = document.getElementById('deleteButton');
+        deleteCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const anyChecked = Array.from(deleteCheckboxes).some(box => box.checked);
+                deleteButton.hidden = !anyChecked;
+            });
+        });
+    });
+
     function delete_tasks() {
         const checkedBoxes = document.querySelectorAll('.to-be-delete:checked');
         const taskIds = Array.from(checkedBoxes).map(box => box.id.split('-')[1]);

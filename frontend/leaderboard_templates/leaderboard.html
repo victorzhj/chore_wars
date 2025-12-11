@@ -41,7 +41,11 @@
 
                 <td class="points">{{ user[2] }} pts</td>
 
-                <td>{{ user[3] }} tasks</td>
+                <td >
+                    <button id="userid-{{ user[0] }}">
+                        {{ user[3] }} tasks
+                    </button>
+                </td>
             </tr>
             {% else %}
             <tr>
@@ -54,6 +58,10 @@
     <div class="back-link">
         <a href="/tasks">← Back to Task List</a>
     </div>
-
+<script>
+    function show_user_tasks() {
+        document.getElementById
+    }
+</script>
 </body>
 </html>
