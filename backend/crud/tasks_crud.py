@@ -86,6 +86,26 @@ def add_task(task_data):
     cursor.close()
     return
 
+def add_multiple_tasks_crud(tasks_data):
+    cursor = conn.cursor()
+    base_query = """
+        INSERT INTO Tasks (title, description, created_by_user_id, points, deadline)
+        VALUES (%s, %s, %s, %s, %s);
+    """
+    task_list = []
+    for task_data in tasks_data:
+        task_list.append((
+            task_data['title'],
+            task_data['description'],
+            task_data['created_by_user_id'],
+            task_data['points'],
+            task_data['deadline']
+        ))
+    cursor.executemany(base_query, task_list)
+    conn.commit()
+    cursor.close()
+    return
+
 def complete_task(task_id, user_id):
     cursor = conn.cursor()
     query = "UPDATE Tasks SET completed=TRUE WHERE task_id=%s;"
@@ -124,4 +144,11 @@ def delete_task(task_id):
     cursor.close()
     return
 
-
+def multi_delete_tasks(task_ids):
+    cursor = conn.cursor()
+    format_strings = ','.join(['%s'] * len(task_ids))
+    query = f"DELETE FROM Tasks WHERE task_id IN ({format_strings});"
+    cursor.execute(query, tuple(task_ids))
+    conn.commit()
+    cursor.close()
+    return

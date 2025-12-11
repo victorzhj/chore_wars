@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, jsonify
-from crud.tasks_crud import get_open_tasks, get_closed_tasks, get_user_completed_tasks, add_task, update_task, delete_task, complete_task
+from crud.tasks_crud import get_open_tasks, get_closed_tasks, get_user_completed_tasks, add_task, add_multiple_tasks_crud, update_task, delete_task, complete_task, multi_delete_tasks
 from crud.user_crud import get_user_points, modify_user_points
 tasks_route = Blueprint('tasks_route', __name__, template_folder='../../frontend/tasks_templates')
 
@@ -53,7 +53,8 @@ def closed_tasks():
     return render_template('closed_tasks.html', closed_tasks=closed_tasks)
 
 @tasks_route.route('/tasks/user', methods=['GET'])
-def user_completed_tasks():
+@tasks_route.route('/tasks/user/<int:user_id>', methods=['GET'])
+def user_completed_tasks(user_id=None):
     """
     Docstring for user_completed_tasks
     Renders a page displaying all tasks completed by the current user.
@@ -65,7 +66,8 @@ def user_completed_tasks():
             <p>{{ task.title }} - {{ task.deadline }}</p>
         {% endfor %}
     """
-    user_id = session['user_id']
+    if user_id == None:
+        user_id = session['user_id']
     completed_tasks = get_user_completed_tasks(user_id)
     return render_template('user_completed_tasks.html', tasks=completed_tasks)
 
@@ -92,6 +94,15 @@ def add_tasks():
         return render_template('add_task.html')
     return render_template('add_task.html')
 
+@tasks_route.route('/tasks/add_multiple', methods=['POST'])
+def add_multiple_tasks():
+    if request.method == 'POST':
+        tasks_data = request.get_json()['tasks']
+        for task in tasks_data:
+            task['created_by_user_id'] = session['user_id']
+            task['deadline'] = task['deadline'].replace('T', ' ') + ':00'
+        add_multiple_tasks_crud(tasks_data)
+        return jsonify({'status': 'success'})
 
 @tasks_route.route('/tasks/completed', methods=['POST'])
 def complete_task_endpoint():  # <--- 이름을 바꿔서 충돌 해결
@@ -149,4 +160,21 @@ def delete_task_route():
     """
     task_id = request.get_json()['task_id']
     delete_task(task_id)
+    return redirect(url_for('tasks_route.tasks'))
+
+@tasks_route.route('/tasks/multi_delete', methods=['POST'])
+def multi_delete_tasks_route():
+    """
+    Docstring for multi_delete_tasks_route
+    Handles deleting multiple tasks. Supports POST requests.
+    Returns:
+        Redirects to the main tasks page after deletion.
+    To delete multiple tasks from the database, send a POST request with JSON body containing a list of task IDs.
+    Example JSON body:
+        {
+            "task_ids": [1, 2, 3]
+        }
+    """
+    task_ids = request.get_json()['task_ids']
+    multi_delete_tasks(task_ids)
     return redirect(url_for('tasks_route.tasks'))

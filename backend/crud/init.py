@@ -21,7 +21,6 @@ def create_tables(cursor: pymysql.cursors.Cursor):
             user_id INT AUTO_INCREMENT PRIMARY KEY,
             username VARCHAR(255) UNIQUE NOT NULL,
             user_password VARCHAR(255) NOT NULL,
-            nickname VARCHAR(255) NOT NULL,
             points INT DEFAULT 0
         );
     """)
@@ -53,10 +52,10 @@ def create_tables(cursor: pymysql.cursors.Cursor):
 
 def init_data(cursor: pymysql.cursors.Cursor):
     cursor.execute("""
-        INSERT INTO Users (username, user_password, nickname, points) VALUES
-            ('Tester1', 'testing1', 'TestGuy1', 10),
-            ('Tester2', 'testing2', 'TestGuy2', 30),
-            ('Tester3', 'testing3', 'TestGuy3', 0)
+        INSERT INTO Users (username, user_password, points) VALUES
+            ('Tester1', 'testing1', 10),
+            ('Tester2', 'testing2', 30),
+            ('Tester3', 'testing3', 0)
     """
 )
     cursor.execute("""

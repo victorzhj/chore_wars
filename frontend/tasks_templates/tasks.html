@@ -13,6 +13,7 @@
         .task-info p { margin: 0; color: #666; font-size: 0.9rem; }
         .points-badge { background-color: #ffc107; padding: 5px 10px; border-radius: 15px; font-weight: bold; font-size: 0.8rem; margin-left: 10px; }
         .btn { padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; text-decoration: none; display: inline-block;}
+        .btn[hidden] {display: none !important;}
         .btn-add { background-color: #007bff; color: white; }
         .btn-complete { background-color: #28a745; color: white; transition: background 0.3s; }
         .btn-complete:hover { background-color: #218838; }
@@ -34,6 +35,7 @@
 
 <div style="margin-bottom: 20px; text-align: right;">
     <a href="/tasks/add" class="btn btn-add">+ Add New Task</a>
+    <button id="deleteButton" hidden onclick="delete_tasks()" class="btn" style="background-color: #dc3545; color: white; margin-left: 10px;">Delete Selected Tasks</button>
 </div>
 
 <h2>Open Tasks</h2>
@@ -45,6 +47,7 @@
             <p style="color: #888; font-size: 0.8rem;">Due: {{ task.deadline }}</p>
         </div>
         <div>
+            <input id="delete-{{ task.task_id }}" type="checkbox" class="to-be-delete" style="margin-right: 10px;">
             <a href="/tasks/modify" style="color: #6c757d; margin-right: 10px; font-size: 0.9rem;">Edit</a>
 
             <button class="btn btn-complete" onclick="completeTask({{ task.task_id }}, {{ task.points }})">Do it!</button>
@@ -95,7 +98,53 @@
             alert("An error occurred while communicating with the server.");
         });
     }
-</script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteCheckboxes = document.querySelectorAll('.to-be-delete');
+        deleteCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const taskCard = this.closest('.task-card');
+                if (this.checked) {
+                    taskCard.style.backgroundColor = '#f8d7da'; 
+                } else {
+                    taskCard.style.backgroundColor = 'white';
+                }
+            });
+        });
+    });
 
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteCheckboxes = document.querySelectorAll('.to-be-delete');
+        const deleteButton = document.getElementById('deleteButton');
+        deleteCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const anyChecked = Array.from(deleteCheckboxes).some(box => box.checked);
+                deleteButton.hidden = !anyChecked;
+            });
+        });
+    });
+
+    function delete_tasks() {
+        const checkedBoxes = document.querySelectorAll('.to-be-delete:checked');
+        const taskIds = Array.from(checkedBoxes).map(box => box.id.split('-')[1]);
+
+        if (taskIds.length === 0) {
+            alert('No tasks selected for deletion.');
+            return;
+        }
+
+        fetch('/tasks/multi_delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ task_ids: taskIds })
+        })
+        .then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Error deleting tasks.');
+            }
+        });   
+    }
+</script>
 </body>
 </html>
