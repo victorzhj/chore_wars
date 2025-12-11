@@ -47,7 +47,7 @@
         <div>
             <a href="/tasks/modify" style="color: #6c757d; margin-right: 10px; font-size: 0.9rem;">Edit</a>
 
-            <button class="btn btn-complete" onclick="completeTask({{ task.task_id }})">Do it!</button>
+            <button class="btn btn-complete" onclick="completeTask({{ task.task_id }}, {{ task.points }})">Do it!</button>
         </div>
     </div>
 {% else %}
@@ -68,7 +68,7 @@
 {% endfor %}
 
 <script>
-    function completeTask(taskId) {
+    function completeTask(taskId, points) {
 
         if(!confirm("Did you really finish this task?")) {
             return;
@@ -79,13 +79,13 @@
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ task_id: taskId })
+            body: JSON.stringify({ task_id: taskId, points: points })
         })
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
 
-                window.location.reload();
+                window.location.reload(true);
             } else {
                 alert("Error: " + (data.message || "Could not complete task."));
             }

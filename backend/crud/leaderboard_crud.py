@@ -1,8 +1,8 @@
 from .config_db_connection import Config
 
-conn = Config().create_connection()
 
 def get_leaderboard_data():
+    conn = Config().create_connection()
     cursor = conn.cursor()
     query = """
         SELECT u.user_id, u.nickname, points, COUNT(l.log_id) 
@@ -15,4 +15,6 @@ def get_leaderboard_data():
     cursor.execute(query)
     results = cursor.fetchall()
     print(results)
+    cursor.close()
+    conn.close()
     return results

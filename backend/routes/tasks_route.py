@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, jsonify
 from crud.tasks_crud import get_open_tasks, get_closed_tasks, get_user_completed_tasks, add_task, update_task, delete_task, complete_task
+from crud.user_crud import get_user_points, modify_user_points
 tasks_route = Blueprint('tasks_route', __name__, template_folder='../../frontend/tasks_templates')
 
 @tasks_route.route('/tasks', methods=['GET'])
@@ -98,8 +99,12 @@ def complete_task_endpoint():  # <--- 이름을 바꿔서 충돌 해결
         return jsonify({'status': 'error', 'message': 'Login required'}), 401
 
     user_id = session['user_id']
+    current_points = get_user_points(user_id)[0]
+    points = request.get_json()['points']
+    new_points = current_points + points
+    modify_user_points(user_id, new_points)
     task_id = request.get_json()['task_id']
-
+    
     # 이제 crud의 complete_task를 정상적으로 호출함
     complete_task(task_id, user_id)
 

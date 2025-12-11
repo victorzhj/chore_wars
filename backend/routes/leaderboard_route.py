@@ -16,4 +16,5 @@ def leaderboard():
         {% endfor %}
     """
     leaderboard_data = get_leaderboard_data()
+    print(leaderboard_data)
     return render_template('leaderboard.html', leaderboard=leaderboard_data)
