@@ -91,22 +91,18 @@ def add_tasks():
         return render_template('add_task.html')
     return render_template('add_task.html')
 
+
 @tasks_route.route('/tasks/completed', methods=['POST'])
-def complete_task():
-    """
-    Docstring for complete_task
-    Handles marking a task as completed. Supports POST requests.
-    Returns:
-        JSON response indicating success status.
-    To mark a task as completed in the database, send a POST request with JSON body containing the task ID.
-    Example JSON body:
-        {
-            "task_id": 1
-        }
-    """
+def complete_task_endpoint():  # <--- 이름을 바꿔서 충돌 해결
+    if 'user_id' not in session:
+        return jsonify({'status': 'error', 'message': 'Login required'}), 401
+
     user_id = session['user_id']
     task_id = request.get_json()['task_id']
+
+    # 이제 crud의 complete_task를 정상적으로 호출함
     complete_task(task_id, user_id)
+
     return jsonify({'status': 'success'})
 
 @tasks_route.route('/tasks/modify', methods=['GET', 'POST'])

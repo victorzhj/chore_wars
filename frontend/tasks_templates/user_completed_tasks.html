@@ -16,9 +16,7 @@
 </head>
 <body>
 
-    <h2>🎉 My Completed Tasks</h2>
-    <p style="text-align: center;">Tasks you have successfully finished.</p>
-
+    <h2>My Completed Tasks</h2>
     {% for task in tasks %}
     <div class="card">
         <span class="points">+{{ task.points }} pts</span>
@@ -29,7 +27,6 @@
     {% else %}
     <div class="empty">
         <p>You haven't completed any tasks yet.</p>
-        <p><a href="/tasks">Go find some work!</a></p>
     </div>
     {% endfor %}
 

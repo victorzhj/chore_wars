@@ -17,7 +17,7 @@
 <body>
 
 <div class="container">
-    <h2>✏️ Modify Task ✏️ </h2>
+    <h2> Modify Task </h2>
     <form id="modifyTaskForm">
         <label>New Title</label>
         <input type="text" name="title" required>
@@ -50,7 +50,6 @@
         const formData = new FormData(this);
         const data = Object.fromEntries(formData.entries());
 
-        // 'completed' 값을 문자열에서 실제 불리언(true/false)으로 변환
         data.completed = data.completed === 'true';
 
         fetch('/tasks/modify', {
