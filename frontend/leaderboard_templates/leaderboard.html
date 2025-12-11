@@ -16,6 +16,7 @@
         .points { font-weight: bold; color: #28a745; }
         .back-link { display: block; margin-top: 20px; text-align: center; }
         .back-link a { text-decoration: none; color: #007bff; font-weight: bold; }
+        .btn { padding: 6px 12px;  background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -25,7 +26,7 @@
         <thead>
             <tr>
                 <th class="rank">Rank</th>
-                <th>Nickname</th>
+                <th>Username</th>
                 <th>Points</th>
                 <th>Tasks Completed</th>
             </tr>
@@ -39,7 +40,11 @@
 
                 <td class="points">{{ user[2] }} pts</td>
 
-                <td>{{ user[3] }} tasks</td>
+                <td >
+                    <button class="btn" onclick="view_user_tasks('{{ user[0] }}')">
+                        {{ user[3] }} tasks
+                    </button>
+                </td>
             </tr>
             {% else %}
             <tr>
@@ -52,6 +57,10 @@
     <div class="back-link">
         <a href="/tasks">← Back to Task List</a>
     </div>
-
+<script>
+    function view_user_tasks(userId) {
+        window.location.href = `/tasks/user/${userId}`;
+    }
+</script>
 </body>
 </html>
