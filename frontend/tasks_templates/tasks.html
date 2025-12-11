@@ -23,10 +23,10 @@
 <body>
 
 <header>
-    <h1>Chore Wars</h1>
+    <h1>Chore wars</h1>
     <nav class="nav">
         <a href="/leaderboard">Leaderboard</a>
-        <a href="/tasks/user">My Completed Tasks</a>
+        <a href="/tasks/user">My completed tasks</a>
         <form action="/user/logout" method="POST" style="display:inline;">
             <button type="submit" style="background:none; border:none; color:#dc3545; cursor:pointer; font-weight:bold; font-size:16px;">Logout</button>
         </form>
@@ -34,7 +34,7 @@
 </header>
 
 <div style="margin-bottom: 20px; text-align: right;">
-    <a href="/tasks/add" class="btn btn-add">+ Add New Task</a>
+    <a href="/tasks/add" class="btn btn-add">+ Add new task</a>
     <button id="deleteButton" hidden onclick="delete_tasks()" class="btn" style="background-color: #dc3545; color: white; margin-left: 10px;">Delete Selected Tasks</button>
 </div>
 
@@ -54,7 +54,7 @@
         </div>
     </div>
 {% else %}
-    <p class="no-tasks">No open tasks available. Great job!</p>
+    <p class="no-tasks">No open tasks available</p>
 {% endfor %}
 
 <h2>Closed Tasks</h2>
