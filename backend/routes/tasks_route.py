@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, jsonify
-from crud.tasks_crud import get_open_tasks, get_closed_tasks, get_user_completed_tasks, add_task, update_task, delete_task, complete_task, multi_delete_tasks
+from crud.tasks_crud import get_open_tasks, get_closed_tasks, get_user_completed_tasks, add_task, add_multiple_tasks_crud, update_task, delete_task, complete_task, multi_delete_tasks
 tasks_route = Blueprint('tasks_route', __name__, template_folder='../../frontend/tasks_templates')
 
 @tasks_route.route('/tasks', methods=['GET'])
@@ -92,6 +92,16 @@ def add_tasks():
         add_task(task)
         return render_template('add_task.html')
     return render_template('add_task.html')
+
+@tasks_route.route('/tasks/add_multiple', methods=['POST'])
+def add_multiple_tasks():
+    if request.method == 'POST':
+        tasks_data = request.get_json()['tasks']
+        for task in tasks_data:
+            task['created_by_user_id'] = session['user_id']
+            task['deadline'] = task['deadline'].replace('T', ' ') + ':00'
+        add_multiple_tasks_crud(tasks_data)
+        return jsonify({'status': 'success'})
 
 @tasks_route.route('/tasks/completed', methods=['POST'])
 def complete_task():

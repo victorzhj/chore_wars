@@ -86,6 +86,25 @@ def add_task(task_data):
     cursor.close()
     return
 
+def add_multiple_tasks_crud(tasks_data):
+    cursor = conn.cursor()
+    base_query = """
+        INSERT INTO Tasks (title, description, created_by_user_id, points, deadline)
+        VALUES (%s, %s, %s, %s, %s);
+    """
+    task_list = []
+    for task_data in tasks_data:
+        task_list.append((
+            task_data['title'],
+            task_data['description'],
+            task_data['created_by_user_id'],
+            task_data['points'],
+            task_data['deadline']
+        ))
+    cursor.executemany(base_query, task_list)
+    conn.commit()
+    cursor.close()
+    return
 
 def complete_task(task_id, user_id):
     cursor = conn.cursor()
