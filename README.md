@@ -1,5 +1,7 @@
 # chore_wars
 
+Find it at: https://chore-wars.onrender.com
+
 Our application uses a gamified approach to managing household chores. Users can register, log in, and complete tasks to earn points. A leaderboard displays the top users based on their accumulated points.
 
 The system consist of a backend built with Python and a frontend using HTML templates.
