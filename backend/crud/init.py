@@ -53,8 +53,8 @@ def create_tables(cursor: pymysql.cursors.Cursor):
 def init_data(cursor: pymysql.cursors.Cursor):
     cursor.execute("""
         INSERT INTO Users (username, user_password, points) VALUES
-            ('Tester1', 'testing1', 10),
-            ('Tester2', 'testing2', 30),
+            ('Tester1', 'testing1', 15),
+            ('Tester2', 'testing2', 25),
             ('Tester3', 'testing3', 0)
     """
 )

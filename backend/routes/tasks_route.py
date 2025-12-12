@@ -20,38 +20,6 @@ def tasks():
     closed_tasks = get_closed_tasks()
     return render_template('tasks.html', open_tasks=open_tasks, closed_tasks=closed_tasks)
 
-@tasks_route.route('/tasks/open', methods=['GET'])
-def open_tasks():
-    """
-    Docstring for open_tasks
-    Renders a page displaying all open tasks.
-    Returns:
-        Rendered HTML template for the open tasks page.
-    To use the returned data in html, you can loop through the open_tasks list.
-    Example:
-        {% for task in open_tasks %}
-            <p>{{ task.title }} - {{ task.deadline }}</p>
-        {% endfor %}
-    """
-    open_tasks = get_open_tasks()
-    return render_template('open_tasks.html', open_tasks=open_tasks)
-
-@tasks_route.route('/tasks/closed', methods=['GET'])
-def closed_tasks():
-    """
-    Docstring for closed_tasks
-    Renders a page displaying all closed tasks.
-    Returns:
-        Rendered HTML template for the closed tasks page.
-    To use the returned data in html, you can loop through the closed_tasks list.
-    Example:
-        {% for task in closed_tasks %}
-            <p>{{ task.title }} - {{ task.deadline }}</p>
-        {% endfor %}
-    """
-    closed_tasks = get_closed_tasks()
-    return render_template('closed_tasks.html', closed_tasks=closed_tasks)
-
 @tasks_route.route('/tasks/user', methods=['GET'])
 @tasks_route.route('/tasks/user/<int:user_id>', methods=['GET'])
 def user_completed_tasks(user_id=None):
