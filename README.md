@@ -1,7 +1,7 @@
 # chore_wars
 
 Find it at: https://chore-wars.onrender.com
-Youtube video: https://www.youtube.com/watch?v=3bwV8yag3zw
+Youtube video: [https://www.youtube.com/watch?v=3bwV8yag3zw](https://www.youtube.com/watch?v=oM9vK_vM45Q)
 
 Our application uses a gamified approach to managing household chores. Users can register, log in, and complete tasks to earn points. A leaderboard displays the top users based on their accumulated points.
 
